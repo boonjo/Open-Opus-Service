@@ -1,4 +1,5 @@
 import requests
+from .errors import OpenOpusError
 
 BASE_URL = "https://api.openopus.org"
 PERIODS = {"Medieval", "Renaissance", "Baroque", "Classical", "Early Romantic",

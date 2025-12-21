@@ -1,6 +1,6 @@
-class OpenopusError(Exception):
+class OpenOpusError(Exception):
     pass
 
 
-class UpstreamUnavailable(OpenopusError):
+class UpstreamUnavailable(OpenOpusError):
     pass

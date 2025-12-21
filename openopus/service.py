@@ -75,7 +75,7 @@ class OpenOpus:
         cached = self.cache.get(key)
         if cached: return cached
 
-        data = self.client.search_composers(name)
+        data = self.client.composers_by_period(period)
         composers = [
             Composer(
                 id=int(c["id"]),
