@@ -9,7 +9,7 @@ class OpenOpus:
         self.cache = cache or TTLCache(3600)
 
     def list_composers(self) -> list[Composer]:
-        """Return all composeres as normalized Composer objects"""
+        """Returns all composeres as normalized Composer objects"""
         key = "composers"
         cached = self.cache.get(key)
         if cached: return cached
@@ -31,7 +31,7 @@ class OpenOpus:
         return composers
 
     def get_composer(self, composer_id: int) -> Composer | None:
-        """Return a single Composer by ID"""
+        """Returns a single Composer by ID"""
         key = f"composer:{composer_id}"
         cached = self.cache.get(key)
         if cached: return cached
@@ -49,7 +49,7 @@ class OpenOpus:
         return composer
 
     def search_composers(self, name: str) -> list[Composer]:
-        """Return composers matching the given name"""
+        """Returns all composers matching the given name"""
         key = f"composers:{name}"
         cached = self.cache.get(key)
         if cached: return cached
@@ -71,6 +71,21 @@ class OpenOpus:
         return composers
 
     def composers_by_period(self, period: str) -> list[Composer]:
+        """
+        Returns composers matching the specific classical period
+        
+        Valid Periods:
+        - Medieval
+        - Renaissance
+        - Baroque
+        - Classical
+        - Early Romantic
+        - Romantic
+        - Late Romantic
+        - 20th Century
+        - Post-War
+        - 21st Century
+        """
         key = f"composers:{period}"
         cached = self.cache.get(key)
         if cached: return cached
@@ -92,6 +107,7 @@ class OpenOpus:
         return composers
 
     def works_by_composer(self, composer_id: int) -> list[Work]:
+        """Returns all works by a composer based on their composer ID"""
         key = f"works:{composer_id}"
         cached = self.cache.get(key)
         if cached: return cached
