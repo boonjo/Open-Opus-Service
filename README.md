@@ -6,7 +6,7 @@ This project exists to decouple application code from the Open Opus API's raw re
 ---
 
 ## Requirements
-- Python >= 3.9
+- Python >= 3.10
 
 ---
 
