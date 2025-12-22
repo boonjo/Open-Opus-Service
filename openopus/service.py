@@ -4,12 +4,24 @@ from .models import Composer, Work
 
 
 class OpenOpus:
+    """
+    Open Opus Service
+
+    :param cache: TTLCache instance, defaults to None
+    :type cache: TTLCache, optional
+    """
     def __init__(self, cache=None):
+        """Constructor method"""
         self.client = OpenOpusClient()
         self.cache = cache or TTLCache(3600)
 
-    def list_composers(self) -> list[Composer]:
-        """Returns all composeres as normalized Composer objects"""
+    def composers(self) -> list[Composer]:
+        """
+        Returns all composers
+
+        :return: A list of Composer objects
+        :rtype: list[Composer]
+        """
         key = "composers"
         cached = self.cache.get(key)
         if cached: return cached
@@ -30,8 +42,13 @@ class OpenOpus:
         self.cache.set(key, composers)
         return composers
 
-    def get_composer(self, composer_id: int) -> Composer | None:
-        """Returns a single Composer by ID"""
+    def composer(self, composer_id: int) -> Composer:
+        """
+        Returns a single Composer by ID
+
+        :param composer_id: Composer ID
+        :return: Composer object
+        """
         key = f"composer:{composer_id}"
         cached = self.cache.get(key)
         if cached: return cached
@@ -48,8 +65,13 @@ class OpenOpus:
 
         return composer
 
-    def search_composers(self, name: str) -> list[Composer]:
-        """Returns all composers matching the given name"""
+    def composers_by_name(self, name: str) -> list[Composer]:
+        """
+        Returns all composers matching the given name, a partial match search
+
+        :param name: Name of composer
+        :return: List of Composer objects
+        """
         key = f"composers:{name}"
         cached = self.cache.get(key)
         if cached: return cached
@@ -73,18 +95,11 @@ class OpenOpus:
     def composers_by_period(self, period: str) -> list[Composer]:
         """
         Returns composers matching the specific classical period
-        
-        Valid Periods:
-        - Medieval
-        - Renaissance
-        - Baroque
-        - Classical
-        - Early Romantic
-        - Romantic
-        - Late Romantic
-        - 20th Century
-        - Post-War
-        - 21st Century
+
+        Use periods() to receive all valid periods
+
+        :param period: Period of classical music
+        :return: List of Composer objects
         """
         key = f"composers:{period}"
         cached = self.cache.get(key)
@@ -106,8 +121,13 @@ class OpenOpus:
         self.cache.set(key, composers)
         return composers
 
-    def works_by_composer(self, composer_id: int) -> list[Work]:
-        """Returns all works by a composer based on their composer ID"""
+    def works(self, composer_id: int) -> list[Work]:
+        """
+        Returns all works by a composer based on their composer ID
+
+        :param composer_id: Composer ID
+        :return: List of Work objects
+        """
         key = f"works:{composer_id}"
         cached = self.cache.get(key)
         if cached: return cached
@@ -124,3 +144,11 @@ class OpenOpus:
 
         self.cache.set(key, works)
         return works
+
+    def periods(self) -> set[str]:
+        """
+        Returns all valid classical music periods
+
+        :return: Set of valid periods
+        """
+        return self.client.get_periods()
