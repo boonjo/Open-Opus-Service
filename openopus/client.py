@@ -35,3 +35,6 @@ class OpenOpusClient:
 
     def work_detail(self, work_id):
         return self.get(f"/work/detail/{work_id}.json")
+    
+    def get_periods(self):
+        return PERIODS
