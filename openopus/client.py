@@ -1,5 +1,5 @@
 import requests
-from .errors import OpenOpusError
+from .errors import OpenOpusError, UpstreamUnavailable
 
 BASE_URL = "https://api.openopus.org"
 PERIODS = {"Medieval", "Renaissance", "Baroque", "Classical", "Early Romantic",
@@ -11,7 +11,12 @@ class OpenOpusClient:
         self.timeout = timeout
 
     def get(self, path, params=None):
-        r = requests.get(BASE_URL + path, params=params, timeout=self.timeout)
+        try:
+            r = requests.get(BASE_URL + path, params=params, timeout=self.timeout)
+        except requests.exceptions.Timeout:
+            raise UpstreamUnavailable("Open Opus API timed out")
+        except requests.exceptions.ConnectionError as exc:
+            raise UpstreamUnavailable("Could not connect to Open Opus API") from exc
         if r.status_code != 200:
             raise OpenOpusError(r.status_code)
         return r.json()
@@ -30,11 +35,11 @@ class OpenOpusClient:
     def get_composer(self, composer_id):
         return self.get(f"/composer/list/id/{composer_id}.json")
 
-    def works_by_composer(self, composer_id):
-        return self.get(f"/work/list/composer/{composer_id}/genre/all.json")
+    def works_by_composer(self, composer_id, genre="all"):
+        return self.get(f"/work/list/composer/{composer_id}/genre/{genre}.json")
 
     def work_detail(self, work_id):
         return self.get(f"/work/detail/{work_id}.json")
-    
+
     def get_periods(self):
         return PERIODS

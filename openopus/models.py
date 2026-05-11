@@ -16,3 +16,4 @@ class Work:
     id: int
     title: str
     genre: str
+    subtitle: str | None = None

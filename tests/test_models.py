@@ -18,3 +18,9 @@ def test_work_fields():
     assert w.id == 1
     assert w.title == "Goldberg Variations, BWV.988"
     assert w.genre == "Keyboard"
+    assert w.subtitle is None
+
+
+def test_work_with_subtitle():
+    w = Work(id=2, title="Symphony No. 5", genre="Orchestral", subtitle="Fate")
+    assert w.subtitle == "Fate"
