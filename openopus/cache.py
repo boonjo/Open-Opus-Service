@@ -18,3 +18,9 @@ class TTLCache:
 
     def set(self, key, value):
         self.store[key] = (value, time.time() + self.ttl)
+
+    def invalidate(self, key):
+        self.store.pop(key, None)
+
+    def clear(self):
+        self.store.clear()
